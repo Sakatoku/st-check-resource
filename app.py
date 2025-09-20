@@ -52,13 +52,15 @@ elif not start_monitoring and st.session_state.get("thread") is not None:
 # グラフを描画するfragment
 @st.fragment(run_every="3s")
 def update_charts():
-    # CPUとメモリの使用率をPlotlyで描画する
-    # グラフは一つにまとめる。デフォルトの最大値を100%にする
-    # 最新データのX軸値は0、1秒前が-10、2秒前が-20、...、300秒前が-3000となる
+    # グラフの描画はPlotlyを使う
     import plotly.graph_objects as go
-    fig1 = go.Figure()
+
+    # 最新データのX軸値は0、1秒前が-1.0、2秒前が-2.0、...、300秒前が-300.0となる
     len_x = len(st.session_state.thread.cpu_usage)
     x = [round((i - len_x + 1) * 0.1, 1) for i in range(len_x)]
+
+    # CPUとメモリの使用率をPlotlyで描画する。デフォルトの最大値を100%にする
+    fig1 = go.Figure()
     fig1.add_trace(
         go.Scatter(
             x=x,
