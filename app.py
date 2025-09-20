@@ -36,6 +36,23 @@ class ResourceMonitor(threading.Thread):
 st.title("Resource Monitor")
 start_monitoring = st.toggle("Start Monitoring", value=False)
 
+# 更新間隔を選択するセレクトスライダー
+update_interval = st.select_slider(
+    "Interval",
+    options=[
+        None,
+        "1s",
+        "3s",
+        "5s",
+        "10s",
+        "30s",
+        "1min",
+        "5min",
+        "10min",
+    ],
+    value="3s"
+)
+
 # 現在の数はここに表示する
 ph1 = st.empty()
 ph2 = st.empty()
@@ -50,7 +67,7 @@ elif not start_monitoring and st.session_state.get("thread") is not None:
     st.session_state.thread = None
 
 # グラフを描画するfragment
-@st.fragment(run_every="3s")
+@st.fragment(run_every=update_interval)
 def update_charts():
     # グラフの描画はPlotlyを使う
     import plotly.graph_objects as go
